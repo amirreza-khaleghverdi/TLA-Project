@@ -78,13 +78,48 @@ class GameOfLife:
         if self.fastMode:
             self.grid = self.update_grid_fast(self.grid)
         else:
-            # TODO: [Part 1a - Core Rules]
-            # Remove the transition logic and implement the 4 standard GoL rules
-            # (Underpopulation, Survival, Overpopulation, Reproduction) by iterating 
-            # through the cells cell-by-cell. Handle self.finite wrapping appropriately.
-            
-            # Student TODO: Implement slow update cell-by-cell logic here
-            pass
+            new_grid = np.copy(self.grid)
+
+            for r in range(self.rows):
+                for c in range(self.cols):
+
+                    live_neighbors = 0
+
+                    for dr in (-1, 0, 1):
+                        for dc in (-1, 0, 1):
+
+                            if dr == 0 and dc == 0:
+                                continue
+
+                            nr = r + dr
+                            nc = c + dc
+
+                            if self.finite:
+                                if 0 <= nr < self.rows and 0 <= nc < self.cols:
+                                    if self.grid[nr, nc] == self.aliveValue:
+                                        live_neighbors += 1
+                            else:
+                                nr %= self.rows
+                                nc %= self.cols
+                                if self.grid[nr, nc] == self.aliveValue:
+                                    live_neighbors += 1
+
+                    if self.grid[r, c] == self.aliveValue:
+
+                        if live_neighbors < 2 or live_neighbors > 3:
+                            new_grid[r, c] = self.deadValue
+
+                        else:
+                            new_grid[r, c] = self.aliveValue
+
+                    else:
+
+                        if live_neighbors == 3:
+                            new_grid[r, c] = self.aliveValue
+                        else:
+                            new_grid[r, c] = self.deadValue
+
+            self.grid = new_grid
 
     def insertBlinker(self, index=(0, 0)):
         '''
