@@ -42,7 +42,6 @@ class LangtonsAnt:
       {current_color: (next_color, turn_direction)}
     """
 
-    # Clockwise order of headings: Up, Right, Down, Left
     DIRECTIONS = [(-1, 0), (0, 1), (1, 0), (0, -1)]
     DIRECTION_NAMES = ['UP', 'RIGHT', 'DOWN', 'LEFT']
 
@@ -59,7 +58,7 @@ class LangtonsAnt:
         self.grid = np.zeros((N, N), dtype=int)
         self.position = (ant_position[0] % N, ant_position[1] % N)
         self.rules = rules
-        self.direction = 0  # start facing Up
+        self.direction = 0 
 
     def get_states(self):
         """
