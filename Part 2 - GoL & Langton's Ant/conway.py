@@ -27,7 +27,6 @@ def parse_pattern(filepath):
 
     first = data_lines[0].strip().lower()
     if first.startswith('x'):
-        # RLE format: first data line is the header (x=.., y=.., rule=..)
         header = data_lines[0]
         body = ''.join(data_lines[1:])
         return _parse_rle(header, body)
