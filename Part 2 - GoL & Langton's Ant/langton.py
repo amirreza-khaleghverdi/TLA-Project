@@ -31,17 +31,7 @@ def rules_from_string(rule_str):
 
 
 class LangtonsAnt:
-    """
-    Implements Langton's Ant / generalized "turmite" cellular automaton.
-
-    Core rule (classic, 2-color):
-      - On a white square: toggle color, turn clockwise ('R'), move forward.
-      - On a black square: toggle color, turn counter-clockwise ('L'), move forward.
-
-    Generalized to N colors via a rules dict:
-      {current_color: (next_color, turn_direction)}
-    """
-
+    
     DIRECTIONS = [(-1, 0), (0, 1), (1, 0), (0, -1)]
     DIRECTION_NAMES = ['UP', 'RIGHT', 'DOWN', 'LEFT']
 
