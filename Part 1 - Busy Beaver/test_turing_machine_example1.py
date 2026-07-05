@@ -1,10 +1,12 @@
 from turing_machine import TuringMachine
 
+# states: q0, saw_#, saw_##, qa
 
 transitions = {
         ('q0', '#'): ('saw_#', '#', 'R'),
         ('saw_#', '#'): ('saw_##', '#', 'R'),
         ('saw_##', ''): ('qa', '', 'R'),
+        # ('qt', ''): ('qt', '', 'R'),
 }
 # This turing machine accepts only the ## string. It rejects on any other input
 # computation:

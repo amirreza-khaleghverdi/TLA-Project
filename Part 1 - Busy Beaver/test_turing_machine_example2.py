@@ -1,6 +1,8 @@
 from turing_machine import TuringMachine
 from test_turing_machine_example1 import print_states
 
+# states: q0, FindDelimiter0, Check0, FindDelimiter1, Check1, FindLeftmost, FindNext, qa, End
+
 transitions = {
         ('q0', '#'): ('End', '#', 'R'),
         ('End', ''): ('qa', '', 'R'),
