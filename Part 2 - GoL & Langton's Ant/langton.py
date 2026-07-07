@@ -4,7 +4,6 @@ Langton's Ant Student Template Module.
 """
 import numpy as np
 
-
 def rules_from_string(rule_str):
     """
     Convenience helper: builds a rules dict from a compact ruleset string
