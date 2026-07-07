@@ -1,1 +1,7 @@
--e "__pycache__/\n*.pyc\n*.pyo\n*.pyd" 
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+.venv/
+venv/
