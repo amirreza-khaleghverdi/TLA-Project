@@ -1,75 +1,81 @@
-# -*- coding: utf-8 -*-
-"""
-Glider-based Logic Gates Student Template Module.
-
-"""
 import numpy as np
 from conway import GameOfLife
 
 
 class GliderLogicGates:
-    """
-    TODO: [Extension - Logic Gates]
-    Instruct the student to:
-    1. Initialize a grid and precisely place "Glider" streams (signals represented by gliders)
-       such that their collision simulates:
-       - An AND gate (produces a specific output pattern only when both inputs A and B are active).
-       - A NOT gate (produces an output signal/glider only when input A is inactive).
-    2. Prove the Turing completeness of Conway's Game of Life by demonstrating these logic gates.
-    """
 
-    def setup_and_gate(self, grid_size=35, input_a_present=False, input_b_present=False):
-        """
-        Set up the Game of Life grid for an AND gate.
-        
-        Args:
-            grid_size (int): Size of the simulation grid.
-            input_a_present (bool): If True, place glider for Input A.
-            input_b_present (bool): If True, place glider for Input B.
-            
-        Returns:
-            GameOfLife: Initialized GameOfLife object.
-        """
-        # Student TODO: Setup glider(s) on the grid
-        pass
+    def setup_and_gate(
+            self, grid_size=35, input_a_present=False, input_b_present=False
+    ):
+        sim = GameOfLife(N=grid_size, finite=True, fastMode=False)
+        if input_a_present:
+            # Glider A (حرکت به پایین-راست)
+            sim.grid[2, 6] = 1
+            sim.grid[3, 7] = 1
+            sim.grid[4, 5] = 1
+            sim.grid[4, 6] = 1
+            sim.grid[4, 7] = 1
+        if input_b_present:
+            # Glider B (حرکت به بالا-راست)
+            sim.grid[22, 6] = 1
+            sim.grid[21, 7] = 1
+            sim.grid[20, 5] = 1
+            sim.grid[20, 6] = 1
+            sim.grid[20, 7] = 1
+        return sim
 
     def setup_not_gate(self, grid_size=35, input_a_present=False):
-        """
-        Set up the Game of Life grid for a NOT gate.
-        
-        Args:
-            grid_size (int): Size of the simulation grid.
-            input_a_present (bool): If True, place glider for Input A.
-            
-        Returns:
-            GameOfLife: Initialized GameOfLife object.
-        """
-        # Student TODO: Setup control glider and input glider(s)
-        pass
+        sim = GameOfLife(N=grid_size, finite=True, fastMode=False)
+        # گلایدر کنترل (همیشه شلیک می‌شود، حرکت به پایین-راست)
+        sim.grid[2, 6] = 1
+        sim.grid[3, 7] = 1
+        sim.grid[4, 5] = 1
+        sim.grid[4, 6] = 1
+        sim.grid[4, 7] = 1
+
+        if input_a_present:
+            # گلایدر A اصلاح‌شده (حرکت به بالا-چپ برای برخورد دقیق شاخ‌به‌شاخ)
+            # مختصات در مسیر مستقیم گلایدر کنترل تنظیم شده است
+            sim.grid[20, 23] = 1
+            sim.grid[20, 24] = 1
+            sim.grid[20, 25] = 1
+            sim.grid[21, 23] = 1
+            sim.grid[22, 24] = 1
+        return sim
 
     def run_and_gate(self, input_a_present, input_b_present):
-        """
-        Run the AND gate simulation for a specific number of steps and return the output.
-        
-        Args:
-            input_a_present (bool): Input A state.
-            input_b_present (bool): Input B state.
-            
-        Returns:
-            bool: True if output is active (e.g. glider/block formed in output region), False otherwise.
-        """
-        # Student TODO: Evolve simulation and evaluate output
-        pass
+        sim = self.setup_and_gate(35, input_a_present, input_b_present)
+        for _ in range(85):
+            sim.evolve()
+
+        # بررسی یک ناحیه وسیع‌تر در مرکز شبکه
+        # اگر برخوردی صورت گرفته باشد، بلوک در این ناحیه گیر می‌افتد
+        collision_zone = sim.grid[10:16, 13:19]
+        if np.sum(collision_zone) > 0:
+            return True
+        return False
 
     def run_not_gate(self, input_a_present):
-        """
-        Run the NOT gate simulation for a specific number of steps and return the output.
-        
-        Args:
-            input_a_present (bool): Input A state.
-            
-        Returns:
-            bool: True if output is active, False otherwise.
-        """
-        # Student TODO: Evolve simulation and evaluate output
-        pass
+        sim = self.setup_not_gate(35, input_a_present)
+        for _ in range(100):
+            sim.evolve()
+
+        # منطقه هدف در پایین-راست نقشه (جایی که گلایدر کنترل باید برسد)
+        output_region = sim.grid[20:, 20:]
+        if np.sum(output_region) > 0:
+            return True
+        return False
+
+
+if __name__ == "__main__":
+    gates = GliderLogicGates()
+
+    print("--- Testing AND Gate ---")
+    print("0 AND 0 =", gates.run_and_gate(False, False))
+    print("1 AND 0 =", gates.run_and_gate(True, False))
+    print("0 AND 1 =", gates.run_and_gate(False, True))
+    print("1 AND 1 =", gates.run_and_gate(True, True))
+
+    print("\n--- Testing NOT Gate ---")
+    print("NOT 0 =", gates.run_not_gate(False))
+    print("NOT 1 =", gates.run_not_gate(True))
